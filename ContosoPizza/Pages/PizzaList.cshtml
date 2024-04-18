@@ -1,0 +1,37 @@
+﻿@page
+@model ContosoPizza.Pages.PizzaListModel
+@{
+    ViewData["Title"] = "Список пицц 🍕";
+}
+
+<h1>Список пицц 🍕</h1>
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th scope="col">Название</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Размер</th>
+            <th scope="col">Глютен</th>
+            <th scope="col">Удалить</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var pizza in Model.PizzaList)
+        {
+            <tr>
+                <td>@pizza.Name</td>
+                <td>@($"{pizza.Price:C}")</td>
+                <td>@pizza.Size</td>
+                <td>@(pizza.IsGlutenFree ? "✔️" : string.Empty)</td>
+                <td>
+                    <form method="post" 
+                        asp-page-handler="Delete" 
+                        asp-route-itemid="@pizza.Id">
+                        <button class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
