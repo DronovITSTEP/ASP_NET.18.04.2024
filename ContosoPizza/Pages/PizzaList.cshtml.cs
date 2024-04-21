@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ContosoPizza.Models;
 using ContosoPizza.Services;
+using System.Security.Permissions;
 
 namespace ContosoPizza.Pages
 {
@@ -9,7 +10,7 @@ namespace ContosoPizza.Pages
     {
         private readonly PizzaService _service;
         public IList<Pizza> PizzaList { get; set; } = default!;
-        
+   
         public PizzaListModel(PizzaService service)
         {
             _service = service;
@@ -18,5 +19,18 @@ namespace ContosoPizza.Pages
         {
             PizzaList = _service.GetPizzas();
         }
+        [BindProperty]
+        public Pizza NewPizza { get; set; } = default!;
+
+        public IActionResult OnPost()
+        {
+            if (NewPizza == null || !ModelState.IsValid)
+            {
+                return Page();
+            }
+            _service.AddPizza(NewPizza);
+            return RedirectToAction("Get");
+        }
+
     }
 }
